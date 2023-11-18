@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/comicassign-react/static/css/main.c5fab76e.css",
+    "main.js": "/comicassign-react/static/js/main.f6e98dd8.js",
+    "static/js/703.7f2ce0b1.chunk.js": "/comicassign-react/static/js/703.7f2ce0b1.chunk.js",
+    "static/js/379.40ddb8df.chunk.js": "/comicassign-react/static/js/379.40ddb8df.chunk.js",
+    "index.html": "/comicassign-react/index.html",
+    "main.c5fab76e.css.map": "/comicassign-react/static/css/main.c5fab76e.css.map",
+    "main.f6e98dd8.js.map": "/comicassign-react/static/js/main.f6e98dd8.js.map",
+    "703.7f2ce0b1.chunk.js.map": "/comicassign-react/static/js/703.7f2ce0b1.chunk.js.map",
+    "379.40ddb8df.chunk.js.map": "/comicassign-react/static/js/379.40ddb8df.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c5fab76e.css",
+    "static/js/main.f6e98dd8.js"
+  ]
+}
