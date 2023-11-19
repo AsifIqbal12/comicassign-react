@@ -189,32 +189,46 @@ function ComicGenerator() {
 
 
   const handleSaveComic = () => {
-    const nonNullImages = generatedImages.filter((imageUrl) => imageUrl !== null);
+  const nonNullImages = generatedImages.filter((imageUrl) => imageUrl !== null);
 
-    if (nonNullImages.length === 0) {
-      console.warn('No images to save.');
-      return;
-    }
+  if (nonNullImages.length === 0) {
+    console.warn('No images to save.');
+    return;
+  }
 
-    const pdf = new jsPDF();
+  const pdf = new jsPDF();
 
+  try {
     nonNullImages.forEach((imageUrl, index) => {
-      const imgData = imageUrl; 
-      pdf.addImage(imgData, 'JPEG', 10, 10, 190, 150); 
-      pdf.text(`${panelTexts[index].mainText}`, 10, 170); 
-      pdf.addPage(); 
+      const imgData = imageUrl;
+      pdf.addImage(imgData, 'JPEG', 10, 10, 190, 150);
+      pdf.text(`${panelTexts[index].mainText}`, 10, 170);
+      pdf.addPage();
     });
 
     // Save the PDF
     pdf.save('comic.pdf');
+
     toast({
-        title: 'Success',
-        description: 'Comic downloaded successfully! (Integration of Speech Bubble is still left)',
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
+      title: 'Success',
+      description: 'Comic downloaded successfully! (Integration of Speech Bubble in the pdf is still left)',
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
     });
-  };
+  } catch (error) {
+    console.error('Error saving PDF:', error);
+
+    toast({
+      title: 'Error',
+      description: 'Failed to save the comic. Please try again later.',
+      status: 'error',
+      duration: 5000,
+      isClosable: true,
+    });
+  }
+};
+
 
   const handleAddSpeechBubble = (index) => {
   setSelectedPanelIndex(index);
