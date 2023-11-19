@@ -6,13 +6,13 @@ const defaultMaxPanelWidth = 150;
 const SpeechBubble = ({ text, marginTop }) => {
   const maxPanelWidth = useMediaQuery('(max-width: 400px)') ? 200 : defaultMaxPanelWidth;
 
-//   const contentWidth = Math.min(text.length * 8, 0.7 * maxPanelWidth);
-  const contentWidth = 0.5 * maxPanelWidth;
+  const contentWidth = Math.min(text.length * 25, 0.8 * maxPanelWidth);
+//   const contentWidth = 0.5 * maxPanelWidth;
   return (
     <Box
     //   position="relative"
       backgroundColor="white"
-      padding={3}
+      padding={2}
       borderRadius="8px"
       boxShadow="md"
     //   marginTop={marginTop}

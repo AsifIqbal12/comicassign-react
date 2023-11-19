@@ -412,13 +412,16 @@ const handleToggleSpeechBubble = (index) => {
             <Image src={imageUrl} alt={`Generated Comic Panel ${index + 1}`} maxW="100%" borderRadius="md" />
           )}
           <Draggable
-            defaultPosition={{ x: 0, y: 0 }}
+            defaultPosition={{ x: 120, y: 90 }}
             disabled={!isDraggable}
             grid={[1, 1]}
             scale={1}
           >
             <Box
               // mt={4}
+              position='absolute'
+              x='23.3'
+              y='123.5'
               color="black"
               fontSize="sm"
               textAlign="center"
