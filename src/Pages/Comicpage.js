@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
-import {Text,useToast,Textarea,Checkbox,Flex, Box,Heading, Input, Button, VStack, Icon } from '@chakra-ui/react';
+import {Text,Input,useToast,Image,Textarea,Checkbox,Flex, Box,Heading, Button, VStack, Icon } from '@chakra-ui/react';
 import axios,{ CancelToken } from 'axios';
 import { DownloadIcon } from '@chakra-ui/icons';
 import { MdCreate } from 'react-icons/md';
-import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import html2pdf from 'html2pdf.js';
+import SpeechBubble from '../Components/SpeechBubble';
+import Draggable from 'react-draggable';
+
 
 function ComicGenerator() {
   const [isLoading, setIsLoading] = useState(false);
-  const [panelTexts, setPanelTexts] = useState([{ mainText: '', annotation: '' }]);
+  const [panelTexts, setPanelTexts] = useState([{ mainText: '', annotation: '', speechBubbleText: '' }]);
   const [generatedImages, setGeneratedImages] = useState(Array(panelTexts.length).fill(null));
   const [selectedPanels, setSelectedPanels] = useState(Array(panelTexts.length).fill(true));
   const [isInputFormActive, setIsInputFormActive] = useState(false); 
   const [panelCount, setPanelCount] = useState(1);
+  const [speechBubbleText, setSpeechBubbleText] = useState('');
+  const [selectedPanelIndex, setSelectedPanelIndex] = useState(null);
+  const [isDraggable, setIsDraggable] = useState(false);
+
   const toast = useToast();
   let cancelTokenSource = axios.CancelToken.source();
   const generateImage = async (textData, index) => {
@@ -42,6 +47,13 @@ function ComicGenerator() {
         const updatedImages = [...prevImages];
         updatedImages[index] = imageUrl;
         return updatedImages;
+      });
+      toast({
+        title: 'Success',
+        description: 'Panel '+(index+1)+' generated successfully!',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
       });
     } catch (error) {
       if (axios.isCancel(error)) {
@@ -76,13 +88,7 @@ function ComicGenerator() {
         })
       );
       setIsLoading(false);
-      toast({
-        title: 'Success',
-        description: 'Panels generated successfully!',
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      });
+      
     } catch (error) {
       console.error('Error generating images:', error.message);
       setIsLoading(false);
@@ -182,27 +188,71 @@ function ComicGenerator() {
 
 
 
-const handleSaveComic = () => {
-  const nonNullImages = generatedImages.filter((imageUrl) => imageUrl !== null);
+  const handleSaveComic = () => {
+    const nonNullImages = generatedImages.filter((imageUrl) => imageUrl !== null);
 
-  if (nonNullImages.length === 0) {
-    console.warn('No images to save.');
-    return;
-  }
+    if (nonNullImages.length === 0) {
+      console.warn('No images to save.');
+      return;
+    }
 
-  const pdf = new jsPDF();
+    const pdf = new jsPDF();
 
-  nonNullImages.forEach((imageUrl, index) => {
-    const imgData = imageUrl; 
-    pdf.addImage(imgData, 'JPEG', 10, 10, 190, 150); 
-    pdf.text(`${panelTexts[index].mainText}`, 10, 170); 
-    pdf.addPage(); 
-  });
+    nonNullImages.forEach((imageUrl, index) => {
+      const imgData = imageUrl; 
+      pdf.addImage(imgData, 'JPEG', 10, 10, 190, 150); 
+      pdf.text(`${panelTexts[index].mainText}`, 10, 170); 
+      pdf.addPage(); 
+    });
 
-  // Save the PDF
-  pdf.save('comic.pdf');
+    // Save the PDF
+    pdf.save('comic.pdf');
+  };
+
+  const handleAddSpeechBubble = (index) => {
+  setSelectedPanelIndex(index);
 };
 
+const handleSpeechBubbleSubmit = () => {
+  // Handle submission logic here
+
+  // Assuming speechBubbleText is the property where you want to store the entered text
+  // Update the panelTexts array with the entered text
+  const updatedPanelTexts = [...panelTexts];
+  updatedPanelTexts[selectedPanelIndex] = {
+    ...updatedPanelTexts[selectedPanelIndex],
+    speechBubbleText: speechBubbleText,
+  };
+
+  // Update the state
+  setPanelTexts(updatedPanelTexts);
+
+  // Clear the input and reset selected index
+  setSpeechBubbleText('');
+  setSelectedPanelIndex(null);
+};
+
+const handleToggleSpeechBubble = (index) => {
+  // Check if speech bubble is present for the selected panel
+  const isSpeechBubblePresent = Boolean(panelTexts[index]?.speechBubbleText);
+  
+  // If speech bubble is present, remove it; otherwise, set the selected index for addition
+  if (isSpeechBubblePresent) {
+    const updatedPanelTexts = [...panelTexts];
+    updatedPanelTexts[index] = {
+      ...updatedPanelTexts[index],
+      speechBubbleText: undefined, // Remove the speech bubble text by setting it to undefined
+    };
+    setPanelTexts(updatedPanelTexts);
+  } else {
+    setSelectedPanelIndex(index);
+  }
+  console.log(isSpeechBubblePresent);
+};
+
+  const toggleDraggable = () => {
+    setIsDraggable(!isDraggable);
+  };
 
 
 
@@ -323,43 +373,95 @@ const handleSaveComic = () => {
           </Button>
         )}
         {generatedImages.some((img) => img !== null) && (
-          <VStack spacing={4} mt={8}>
+        <VStack spacing={4} mt={8} width="100%">
             {generatedImages.map((imageUrl, index) => (
               <Box
-                key={index}
-                bg="white"
-                boxShadow="md"
-                p={4}
-                borderRadius="md"
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                position="relative"
-                marginBottom={4}  
-              >
-                {imageUrl !== null && (
-                  <img
-                    src={imageUrl}
-                    alt={`Generated Comic Panel ${index + 1}`}
-                    maxW="100%"
-                    borderRadius="md"
-                  />
-                )}
-                <Box
-                  mt={2}
-                  color="black"
-                  fontSize="sm"
-                  textAlign="center"
-                  width="100%"
-                >
-                  <Text mt={2}>{panelTexts[index].mainText}</Text>
-                  <Text mt={2}>{panelTexts[index].annotation}</Text>
-                </Box>
+          key={index}
+          bg="white"
+          boxShadow="md"
+          p={4}
+          borderRadius="md"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          position="relative"
+          width="100%"
+        >
+          {imageUrl !== null && (
+            <Image src={imageUrl} alt={`Generated Comic Panel ${index + 1}`} maxW="100%" borderRadius="md" />
+          )}
+          <Draggable
+            defaultPosition={{ x: 0, y: 0 }}
+            disabled={!isDraggable}
+            grid={[1, 1]}
+            scale={1}
+            // bounds="parent"
+          >
+            <Box
+              // mt={4}
+              color="black"
+              fontSize="sm"
+              textAlign="center"
+              width="100%"
+              className="handle"
+            >
+              {panelTexts[index]?.speechBubbleText && (
+                  <SpeechBubble text={panelTexts[index].speechBubbleText} marginTop={2} />
+              )}
+              {/* <Box mt={2}>
+                <Text></Text>
+              </Box> */}
+            </Box>
+          </Draggable>
+          {selectedPanelIndex === index ? (
+            <>
+              <Box mt={2} width="100%">
+                <Input
+                  placeholder="Enter speech bubble text"
+                  value={speechBubbleText}
+                  onChange={(e) => setSpeechBubbleText(e.target.value)}
+                />
               </Box>
+              <Flex mt={2}>
+                <Button
+                  size="sm"
+                  mr={2}
+                  onClick={() => handleToggleSpeechBubble(-1)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => handleSpeechBubbleSubmit()}
+                >
+                  Submit
+                </Button>
+              </Flex>
+            </>
+          ) : (
+            <Flex mt={2}>
+              <Button
+                size="sm"
+                // position="absolute"
+                bottom="3px"
+                onClick={() => handleToggleSpeechBubble(index)}
+                mr={2} // Add margin-right for spacing
+              >
+                {!panelTexts[index].speechBubbleText ? "Add Speech Bubble" : "Remove Speech Bubble"}
+              </Button>
+                <Button onClick={toggleDraggable} size="sm"
+                bottom="3px" isDisabled={!panelTexts[index].speechBubbleText}>
+                  {isDraggable ? 'Disable Drag' : 'Drag Speech Bubble'}
+                </Button>
+            </Flex>
+
+          )}
+        </Box>
+
+
             ))}
           </VStack>
         )}
-
         {generatedImages.some((img) => img !== null) && (
           <Button colorScheme="green" size="md" mt={4} onClick={handleSaveComic}>
             <DownloadIcon mr={2}/>Download Comic
