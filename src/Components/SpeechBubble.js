@@ -1,21 +1,21 @@
 import { Box, useMediaQuery } from '@chakra-ui/react';
 
 // Assuming you have a default max width for larger screens
-const defaultMaxPanelWidth = 300;
+const defaultMaxPanelWidth = 150;
 
 const SpeechBubble = ({ text, marginTop }) => {
-  const maxPanelWidth = useMediaQuery('(max-width: 400px)') ? 600 : defaultMaxPanelWidth;
+  const maxPanelWidth = useMediaQuery('(max-width: 400px)') ? 200 : defaultMaxPanelWidth;
 
-  const contentWidth = Math.min(text.length * 8, 0.3 * maxPanelWidth);
-
+//   const contentWidth = Math.min(text.length * 8, 0.7 * maxPanelWidth);
+  const contentWidth = 0.5 * maxPanelWidth;
   return (
     <Box
-      position="relative"
+    //   position="relative"
       backgroundColor="white"
-      padding={4}
+      padding={3}
       borderRadius="8px"
       boxShadow="md"
-      marginTop={marginTop}
+    //   marginTop={marginTop}
       width={`${contentWidth}px`}
       _after={{
         content: '""',

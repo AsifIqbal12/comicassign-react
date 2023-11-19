@@ -416,7 +416,6 @@ const handleToggleSpeechBubble = (index) => {
             disabled={!isDraggable}
             grid={[1, 1]}
             scale={1}
-            // bounds="parent"
           >
             <Box
               // mt={4}
