@@ -207,6 +207,13 @@ function ComicGenerator() {
 
     // Save the PDF
     pdf.save('comic.pdf');
+    toast({
+        title: 'Success',
+        description: 'Comic downloaded successfully! (Integration of Speech Bubble is still left)',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+    });
   };
 
   const handleAddSpeechBubble = (index) => {
@@ -441,7 +448,7 @@ const handleToggleSpeechBubble = (index) => {
           ) : (
             <Flex mt={2}>
               <Button
-                size="sm"
+                size="md"
                 // position="absolute"
                 bottom="3px"
                 onClick={() => handleToggleSpeechBubble(index)}
@@ -449,7 +456,7 @@ const handleToggleSpeechBubble = (index) => {
               >
                 {!panelTexts[index].speechBubbleText ? "Add Speech Bubble" : "Remove Speech Bubble"}
               </Button>
-                <Button onClick={toggleDraggable} size="sm"
+                <Button onClick={toggleDraggable} size="md"
                 bottom="3px" isDisabled={!panelTexts[index].speechBubbleText}>
                   {isDraggable ? 'Disable Drag' : 'Drag Speech Bubble'}
                 </Button>
