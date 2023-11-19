@@ -1,17 +1,19 @@
 {
   "files": {
     "main.css": "/comicassign-react/static/css/main.c5fab76e.css",
-    "main.js": "/comicassign-react/static/js/main.f6e98dd8.js",
+    "main.js": "/comicassign-react/static/js/main.e1e1deef.js",
+    "static/js/498.b13bd6d3.chunk.js": "/comicassign-react/static/js/498.b13bd6d3.chunk.js",
     "static/js/703.7f2ce0b1.chunk.js": "/comicassign-react/static/js/703.7f2ce0b1.chunk.js",
     "static/js/379.40ddb8df.chunk.js": "/comicassign-react/static/js/379.40ddb8df.chunk.js",
     "index.html": "/comicassign-react/index.html",
     "main.c5fab76e.css.map": "/comicassign-react/static/css/main.c5fab76e.css.map",
-    "main.f6e98dd8.js.map": "/comicassign-react/static/js/main.f6e98dd8.js.map",
+    "main.e1e1deef.js.map": "/comicassign-react/static/js/main.e1e1deef.js.map",
+    "498.b13bd6d3.chunk.js.map": "/comicassign-react/static/js/498.b13bd6d3.chunk.js.map",
     "703.7f2ce0b1.chunk.js.map": "/comicassign-react/static/js/703.7f2ce0b1.chunk.js.map",
     "379.40ddb8df.chunk.js.map": "/comicassign-react/static/js/379.40ddb8df.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c5fab76e.css",
-    "static/js/main.f6e98dd8.js"
+    "static/js/main.e1e1deef.js"
   ]
 }
